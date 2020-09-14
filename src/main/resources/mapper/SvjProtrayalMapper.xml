@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+一个sql语句会执行, 得到数据, 服务层如何到到这个sql执行的结果
+
+-->
+<mapper namespace="com.svj.portrayalpublisher.mapper.SvjPortrayalMapper">
+    <select id="getUserInfo" resultType="com.svj.bean.SvjUser">
+        select userid,"info"."organid","info"."organname","info"."deptid" ,"info"."deptname" ,"info"."username" ,"info"."regemail" ,"info"."regdate" from "3vj_user_portrayal" where userid=#{userid}
+    </select>
+    <resultMap id="UserList" type="java.util.Map" autoMapping="true"></resultMap>
+
+
+
+</mapper>
