@@ -4,7 +4,7 @@ import com.svj.bean.SvjUser;
 
 
 
-public interface PublisherService {
+public interface SvjPublisherService {
     /**
      * 获取用户信息
      * @param userid
