@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+一个sql语句会执行, 得到数据, 服务层如何到到这个sql执行的结果
+
+-->
+<mapper namespace="com.svj.portrayalpublisher.mapper.ConvertMapper">
+    <select id="getConvert" resultType="com.svj.bean.ActionConvert">
+select
+sum(to_number("info"."collector_count")) as collector_count,
+sum(to_number("info"."order_count")) as order_count,
+sum(to_number("info"."collect2order_convert_ratio")) as collect2order_convert_ratio,
+sum(to_number("info"."payment_count")) as payment_count,
+sum(to_number("info"."order2payment_convert_ratio")) as order2payment_convert_ratio
+from "meijia_user_convert_day" where "dt" BETWEEN '2017-01-01' AND '2020-09-01'
+    </select>
+
+
+
+
+</mapper>
