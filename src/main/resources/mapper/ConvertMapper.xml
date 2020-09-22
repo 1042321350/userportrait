@@ -6,15 +6,7 @@
 -->
 <mapper namespace="com.svj.portrayalpublisher.mapper.ConvertMapper">
     <select id="getConvert" resultType="com.svj.bean.ActionConvert">
-select
-sum(to_number("info"."collector_count")) as collector_count,
-sum(to_number("info"."order_count")) as order_count,
-sum(to_number("info"."collect2order_convert_ratio")) as collect2order_convert_ratio,
-sum(to_number("info"."payment_count")) as payment_count,
-sum(to_number("info"."order2payment_convert_ratio")) as order2payment_convert_ratio
-from "meijia_user_convert_day" where "dt" BETWEEN '2017-01-01' AND '2020-09-01'
-    </select>
-
+SELECT sum(to_number("info"."collector_count")) as collector_count, sum(to_number("info"."order_count")) as order_count, sum(to_number("info"."order_count"))/sum(to_number("info"."collector_count")) as collect2order_convert_ratio, sum(to_number("info"."payment_count")) as payment_count, sum(to_number("info"."payment_count"))/sum(to_number("info"."order_count")) as order2payment_convert_ratio from "meijia_user_convert_day" where "dt" BETWEEN #{dtStart} AND #{dtEnd} </select>
 
 
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+一个sql语句会执行, 得到数据, 服务层如何到到这个sql执行的结果
+
+-->
+<mapper namespace="com.svj.portrayalpublisher.mapper.LabelQueryMapper">
+    <!--<select id="getLabelQueryInfo" resultMap="LabelQueryList">
+SELECT
+svj_user_userid,
+"info"."svj_user_username",
+"info"."svj_user_regdate",
+"info"."svj_user_regemail",
+"info"."svj_user_birthdaytime",
+"info"."svj_user_lastlogintime",
+"info"."svj_user_organname",
+"info"."svj_user_deptname",
+"info"."svj_user_employeeid",
+"info"."svj_user_mobile"
+from "svj_user_portrayal" where to_number("info"."svj_user_scheme_count") > 200
+    </select>
+    <resultMap id="LabelQueryList" type="java.util.Objects"></resultMap>-->
+    <select id="getLabelQueryInfo" resultType="com.svj.bean.LabelQuery">
+SELECT
+svj_user_userid,
+"info"."svj_user_username",
+"info"."svj_user_regdate",
+"info"."svj_user_regemail",
+"info"."svj_user_birthdaytime",
+"info"."svj_user_lastlogintime",
+"info"."svj_user_organname",
+"info"."svj_user_deptname",
+"info"."svj_user_employeeid",
+"info"."svj_user_mobile"
+from "svj_user_portrayal" where ${filter}
+    </select>
+
+
+
+
+</mapper>

@@ -9,11 +9,57 @@ package com.svj.bean;
  */
 public class ActionConvert {
     //String dt;
-    int collector_count;//收藏数
-    int order_count;//下单数
-    double collect2order_convert_ratio;//收藏到下单转化率
-    int payment_count;//支付数
-    double order2payment_convert_ratio;//下单到支付的转化率
+    String collectorCount;
+    String orderCount;
+    String collect2orderConvertRatio;
+    String paymentCount;
+    String order2paymentConvertRatio;
 
+    public ActionConvert(String collectorCount, String orderCount, String collect2orderConvertRatio, String paymentCount, String order2paymentConvertRatio) {
+        this.collectorCount = collectorCount;
+        this.orderCount = orderCount;
+        this.collect2orderConvertRatio = collect2orderConvertRatio;
+        this.paymentCount = paymentCount;
+        this.order2paymentConvertRatio = order2paymentConvertRatio;
+    }
 
+    public String getCollectorCount() {
+        return collectorCount;
+    }
+
+    public void setCollectorCount(String collectorCount) {
+        this.collectorCount = collectorCount;
+    }
+
+    public String getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(String orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    public String getCollect2orderConvertRatio() {
+        return collect2orderConvertRatio;
+    }
+
+    public void setCollect2orderConvertRatio(String collect2orderConvertRatio) {
+        this.collect2orderConvertRatio = collect2orderConvertRatio;
+    }
+
+    public String getPaymentCount() {
+        return paymentCount;
+    }
+
+    public void setPaymentCount(String paymentCount) {
+        this.paymentCount = paymentCount;
+    }
+
+    public String getOrder2paymentConvertRatio() {
+        return order2paymentConvertRatio;
+    }
+
+    public void setOrder2paymentConvertRatio(String order2paymentConvertRatio) {
+        this.order2paymentConvertRatio = order2paymentConvertRatio;
+    }
 }

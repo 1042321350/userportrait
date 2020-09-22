@@ -5,8 +5,44 @@
 
 -->
 <mapper namespace="com.svj.portrayalpublisher.mapper.SvjPortrayalMapper">
-    <select id="getUserInfo" resultType="com.svj.bean.SvjUser">
-select * from "svj_user_portrayal" where svj_user_userid=#{userid}
+    <select id="getUserInfo" resultType="com.svj.bean.SvjUserPortrait">
+select
+svj_user_userid,
+"info"."svj_user_username",
+"info"."svj_user_nickname",
+"info"."svj_user_regdate",
+"info"."svj_user_regemail",
+"info"."svj_user_birthdaytime",
+"info"."svj_user_lastlogintime",
+"info"."svj_user_organname",
+"info"."svj_user_deptname",
+"info"."svj_user_employeeid",
+"info"."svj_user_mobile",
+"info"."svj_user_scheme_count",
+"info"."svj_user_average_mon_scheme_count",
+"info"."svj_user_thisyear_scheme_count",
+"info"."svj_user_lastyear_scheme_count",
+"info"."svj_user_thismon_scheme_count",
+"info"."svj_user_rendergraph_count",
+"info"."svj_user_render_day_count",
+"info"."svj_user_finally_render_time",
+"info"."svj_user_lastyear_rendergraph_count",
+"info"."svj_user_thisyear_rendergraph_count",
+"info"."svj_user_lastmon_rendergraph_count",
+"info"."svj_user_thismon_rendergraph_count",
+"info"."svj_user_limit_count",
+"info"."svj_user_allocation_count",
+"info"."svj_user_unallocation_count",
+"info"."svj_user_payinglimit_count",
+"info"."svj_user_presenter_limit_count",
+"info"."svj_user_order_date_first",
+"info"."svj_user_order_date_last",
+"info"."svj_user_order_count",
+"info"."svj_user_order_amount",
+"info"."svj_user_payment_count",
+"info"."svj_user_payment_amount",
+"info"."svj_user_average_payment_amount"
+from "svj_user_portrayal" where svj_user_userid=#{userid}
     </select>
 
 

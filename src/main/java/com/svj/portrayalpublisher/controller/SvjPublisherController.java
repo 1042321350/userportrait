@@ -1,17 +1,19 @@
 package com.svj.portrayalpublisher.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.svj.bean.ActionConvert;
-import com.svj.bean.SvjUser;
+import com.svj.bean.*;
 import com.svj.portrayalpublisher.service.ConvertService;
+import com.svj.portrayalpublisher.service.LabelQueryPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.svj.portrayalpublisher.service.SvjPublisherService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -27,13 +29,13 @@ public class SvjPublisherController {
     public String svjuserportrayal(@RequestParam("userid") String userid) {
 
         System.out.println(userid);
-        SvjUser user = service.getUserInfo(userid);
+        SvjUserPortrait user = service.getUserInfo(userid);
         System.out.println(user.getSvj_user_userid());
         ArrayList<Map<String, String>> result = new ArrayList<>();
         Map<String, String> map1 = new HashMap<>();
        // map1.put("value", service.getUserInfo(userid).toString());
         map1.put("svj_user_userid", user.getSvj_user_userid());
-        map1.put("svj_user_username",user.getSvj_user_name());
+        map1.put("svj_user_username",user.getSvj_user_username());
         map1.put("svj_user_nickname", user.getSvj_user_nickname());
         map1.put("svj_user_regdate", user.getSvj_user_regdate());
         map1.put("svj_user_regemail", user.getSvj_user_regemail());
@@ -116,22 +118,38 @@ public class SvjPublisherController {
         return JSON.toJSONString(map1);
     }
 //localhost:8070/convert-query?dtStart=2017-01-01&dtEnd=2020-09-01
-    @GetMapping("/convert-query")
-    public String getconvert(@RequestParam(value = "dtStart", defaultValue = "2017-01-01") String dtStart,@RequestParam(value = "dtEnd", defaultValue = "2020-01-01") String dtEnd) {
+@GetMapping("/convert-query")
+public String getconvert(@RequestParam("dtStart") String dtStart,@RequestParam("dtEnd") String dtEnd) {
 
-        System.out.println(dtStart+"-----"+dtEnd);
-        //ActionConvert convert = convertService.getConvert(dtStart, dtEnd);
-        ArrayList<Map<String, String>> result = new ArrayList<>();
-        Map<String, String> map1 = new HashMap<>();
-        map1.put("dtStart", dtStart);
-        map1.put("dtEnd", dtEnd);
-        map1.put("collector_count", "3000");
-        map1.put("order_count", "1000");
-        map1.put("collect2order_convert_ratio", "0.3");
-        map1.put("payment_count", "500");
-        map1.put("order2payment_convert_ratio", "0.5");
-        result.add(map1);
-        return JSON.toJSONString(map1);
+    System.out.println(dtStart+"-----"+dtEnd);
+    ActionConvert convert = convertService.getConvert(dtStart, dtEnd);
+    ArrayList<Map<String, Object>> result = new ArrayList<>();
+    Map<String, Object> map1 = new HashMap<>();
+    map1.put("dtStart", dtStart);
+    map1.put("dtEnd", dtEnd);
+    System.out.println(map1);
+    if (convert!=null) {
+        map1.put("collector_count", convert.getCollectorCount());
+        map1.put("order_count", convert.getOrderCount());
+        map1.put("collect2order_convert_ratio", convert.getCollect2orderConvertRatio());
+        map1.put("payment_count", convert.getPaymentCount());
+        map1.put("order2payment_convert_ratio", convert.getOrder2paymentConvertRatio());
+    }else {
+        map1.put("collector_count", "0");
+        map1.put("order_count", "0");
+        map1.put("collect2order_convert_ratio", "0");
+        map1.put("payment_count", "0");
+        map1.put("order2payment_convert_ratio", "0");
+    }
+    result.add(map1);
+    return JSON.toJSONString(map1);
+}
+    @GetMapping("/user-meijiaquery")
+    public String meijiaportrayal(@RequestParam("userid") String userid) {
+        System.out.println(userid);
+        MeijiaUser meijiaUserInfo = service.getMeijiaUserInfo(userid);
+        System.out.println(meijiaUserInfo);
+        return JSON.toJSONString(meijiaUserInfo);
     }
     //localhost:8070/convert-query?dtStart=2017-01-01&dtEnd=2020-09-01
     @GetMapping("/lifecycle-query")
@@ -153,70 +171,42 @@ public class SvjPublisherController {
         return JSON.toJSONString(map1);
     }
     @GetMapping("/user-group-query")
-    public String svjusergroup(@RequestParam(value = "filter", defaultValue = "00000077213") String filter) {
+    public String svjusergroup(@RequestBody UserGroupConditionVO filter) {
 
         System.out.println(filter);
         ArrayList<Map<String, String>> result = new ArrayList<>();
         Map<String, String> map1 = new HashMap<>();
-        Map<String, String> map2 = new HashMap<>();
-        Map<String, String> map3 = new HashMap<>();
-        // map1.put("value", service.getUserInfo(userid).toString());
-        SvjUser user = service.getUserInfo(filter);
-        System.out.println(user.getSvj_user_userid());
-        map1.put("userid", user.getSvj_user_userid());
-        map1.put("username",user.getSvj_user_name());
-        map1.put("nickname", user.getSvj_user_nickname());
-        map1.put("svj_user_regdate", user.getSvj_user_regdate());
-        map1.put("svj_user_regemail", user.getSvj_user_regemail());
-        map1.put("svj_user_birthday", user.getSvj_user_birthdaytime());
-        map1.put("svj_user_lastlogintime", user.getSvj_user_lastlogintime());
-        map1.put("svj_user_organname", user.getSvj_user_organname());
-        map1.put("svj_user_deptname", user.getSvj_user_deptname());
-        map1.put("svj_user_employeeidname",user.getSvj_user_employeeid());
-        map1.put("svj_user_mobile",user.getSvj_user_mobile());
-        result.add(map1);
-        //result.add(JSON.parseObject(JSON.toJSONString(user), Map.class));
-        map2.put("svj_user_userid", user.getSvj_user_userid());
-        map2.put("svj_user_username",user.getSvj_user_name());
-        map2.put("svj_user_nickname", user.getSvj_user_nickname());
-        map2.put("svj_user_regdate", user.getSvj_user_regdate());
-        map2.put("svj_user_regemail", user.getSvj_user_regemail());
-        map2.put("svj_user_birthday", user.getSvj_user_birthdaytime());
-        map2.put("svj_user_lastlogintime", user.getSvj_user_lastlogintime());
-        map2.put("svj_user_organname", user.getSvj_user_organname());
-        map2.put("svj_user_deptname", user.getSvj_user_deptname());
-        map2.put("svj_user_employeeidname",user.getSvj_user_employeeid());
-        map2.put("svj_user_mobile",user.getSvj_user_mobile());
-        result.add(map2);
-        map3.put("svj_user_userId", user.getSvj_user_userid());
-        map3.put("svj_user_username",user.getSvj_user_name());
-        map3.put("svj_user_nickname", user.getSvj_user_nickname());
-        map3.put("svj_user_regdate", user.getSvj_user_regdate());
-        map3.put("svj_user_regemail", user.getSvj_user_regemail());
-        map3.put("svj_user_birthday", user.getSvj_user_birthdaytime());
-        map3.put("svj_user_lastlogintime", user.getSvj_user_lastlogintime());
-        map3.put("svj_user_organname", user.getSvj_user_organname());
-        map3.put("svj_user_deptname", user.getSvj_user_deptname());
-        map3.put("svj_user_employeeidname",user.getSvj_user_employeeid());
-        map3.put("svj_user_mobile",user.getSvj_user_mobile());
-        result.add(map3);
+
+
+
         return JSON.toJSONString(result);
     }
     //http://localhost:8070/label-query
+    @Autowired
+    LabelQueryPublisherService labelservice;
     @GetMapping("/label-query")
     public String svjlabel(@RequestParam(value = "comName", defaultValue = "三维家") String comName,@RequestParam(value = "labelId", defaultValue = "svj_user_scheme_count") String labelId,@RequestParam(value = "condition", defaultValue = ">") String condition,@RequestParam(value = "conValue", defaultValue = "200") String conValue) {
 
         System.out.println("公司名称:"+conValue);
-        String filter = "\"info\".\""+labelId+"\""+condition+conValue;
+        String filter = null;
+        if(condition.equals("=")){
+            filter = "\"info\".\""+labelId+"\""+condition+conValue;
+        }else {
+             filter = "to_number(\"info\".\""+labelId+"\")"+condition+conValue;
+        }
+        //String filter = "\"info\".\""+labelId+"\""+condition+conValue;
         System.out.println("查询条件:"+filter);
-        ArrayList<Map<String, String>> result = new ArrayList<>();
-        Map<String, String> map1 = new HashMap<>();
-        Map<String, String> map2 = new HashMap<>();
-        Map<String, String> map3 = new HashMap<>();
+        ArrayList<LabelQuery> result = new ArrayList<>();
+        //Map<String, String> map1 = new HashMap<>();
+        List<LabelQuery> querylist = labelservice.getLabelQueryInfo(filter);
+        for(LabelQuery labelQuery:querylist){
+            result.add(labelQuery);
+        }
+
         // map1.put("value", service.getUserInfo(userid).toString());
         //SvjUser user = service.getUserInfo(conValue);
         //System.out.println(user.getSvj_userid());
-        map1.put("svj_user_userid", "用户id1");
+       /* map1.put("svj_user_userid", "用户id1");
         map1.put("svj_user_username","用户名称");
         map1.put("svj_user_regdate", "注册时间");
         map1.put("svj_user_regemail", "注册邮箱");
@@ -227,32 +217,8 @@ public class SvjPublisherController {
         map1.put("svj_user_employeeidname","员工姓名");
         map1.put("svj_user_mobile","13436965621");
         map1.put(labelId,"1111");
-        result.add(map1);
-        //result.add(JSON.parseObject(JSON.toJSONString(user), Map.class));
-        map2.put("svj_user_userid", "用户id2");
-        map2.put("svj_user_username","用户名称");
-        map2.put("svj_user_regdate", "注册时间");
-        map2.put("svj_user_regemail", "注册邮箱");
-        map2.put("svj_user_birthday", "生日");
-        map2.put("svj_user_lastlogintime", "最后登入时间");
-        map2.put("svj_user_organname", "企业名称");
-        map2.put("svj_user_deptname", "部门名称");
-        map2.put("svj_user_employeeidname","员工姓名");
-        map2.put("svj_user_mobile","13436965621");
-        map2.put(labelId,"1111");
-        result.add(map2);
-        map3.put("svj_user_userid", "用户id3");
-        map3.put("svj_user_username","用户名称");
-        map3.put("svj_user_regdate", "注册时间");
-        map3.put("svj_user_regemail", "注册邮箱");
-        map3.put("svj_user_birthday", "生日");
-        map3.put("svj_user_lastlogintime", "最后登入时间");
-        map3.put("svj_user_organname", "企业名称");
-        map3.put("svj_user_deptname", "部门名称");
-        map3.put("svj_user_employeeidname","员工姓名");
-        map3.put("svj_user_mobile","13436965621");
-        map3.put(labelId,"1111");
-        result.add(map3);
+        result.add(map1);*/
+
         return JSON.toJSONString(result);
     }
 

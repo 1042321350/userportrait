@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+一个sql语句会执行, 得到数据, 服务层如何到到这个sql执行的结果
+
+-->
+<mapper namespace="com.svj.portrayalpublisher.mapper.MeijiaPortrayalMapper">
+    <select id="getUserInfo" resultType="com.svj.bean.MeijiaUser">
+        select "userid","info"."username","info"."nickname","info"."sex","info"."birthdaytime","info"."servicearea" ,"info"."shop_industries" ,"info"."role_code" ,"info"."stylecategoryid" ,"info"."register_source","info"."book_count" ,"info"."collect_count" ,"info"."operation_count" ,"info"."comment_count","info"."max_day_book_count" ,"info"."max_day_collect_count" ,"info"."max_day_operation_count" ,"info"."max_day_comment_count","info"."order_count","info"."order_amount" ,"info"."payment_count","info"."payment_amount","info"."average_payment_amount" ,"info"."max_day_payment_amount" from "meijia_user_portrayal" where "userid"=#{userid}
+    </select>
+</mapper>

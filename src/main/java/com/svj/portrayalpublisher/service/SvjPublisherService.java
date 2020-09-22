@@ -1,7 +1,10 @@
 package com.svj.portrayalpublisher.service;
 
-import com.svj.bean.SvjUser;
 
+
+
+import com.svj.bean.MeijiaUser;
+import com.svj.bean.SvjUserPortrait;
 
 
 public interface SvjPublisherService {
@@ -11,7 +14,7 @@ public interface SvjPublisherService {
      * @return
      */
 
-    SvjUser getUserInfo(String userid);
-
+    SvjUserPortrait getUserInfo(String userid);
+    MeijiaUser getMeijiaUserInfo(String userid);
 
 }
