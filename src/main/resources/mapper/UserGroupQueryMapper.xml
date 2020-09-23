@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+一个sql语句会执行, 得到数据, 服务层如何到到这个sql执行的结果
+
+-->
+<mapper namespace="com.svj.portrayalpublisher.mapper.UserGroupQueryMapper">
+
+    <select id="getUserGroupQueryInfo" resultType="com.svj.bean.UserGroupQuery">
+              SELECT
+svj_user_userid,
+"info"."svj_user_username",
+"info"."svj_user_regdate",
+"info"."svj_user_regemail",
+"info"."svj_user_birthdaytime",
+"info"."svj_user_lastlogintime",
+"info"."svj_user_organname",
+"info"."svj_user_deptname",
+"info"."svj_user_employeeid",
+"info"."svj_user_mobile"
+from "svj_user_portrayal"
+        where
+        <foreach collection="list" index="index" item="item" open="" separator="and" close="">
+
+            <choose>
+                <when test="item.condition == '='.toString()">
+                    "info"."${item.labelId}"${item.condition}#{item.value}
+                </when>
+                <otherwise>
+                    to_number("info"."${item.labelId}")${item.condition}${item.value}
+                </otherwise>
+            </choose>
+
+        </foreach>
+    </select>
+
+
+
+
+</mapper>

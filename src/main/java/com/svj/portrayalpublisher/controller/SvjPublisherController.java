@@ -4,11 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.svj.bean.*;
 import com.svj.portrayalpublisher.service.ConvertService;
 import com.svj.portrayalpublisher.service.LabelQueryPublisherService;
+import com.svj.portrayalpublisher.service.UserGroupQueryPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.svj.portrayalpublisher.service.SvjPublisherService;
 
 import java.util.ArrayList;
@@ -170,29 +168,61 @@ public String getconvert(@RequestParam("dtStart") String dtStart,@RequestParam("
         result.add(map1);
         return JSON.toJSONString(map1);
     }
-    @GetMapping("/user-group-query")
-    public String svjusergroup(@RequestBody UserGroupConditionVO filter) {
 
-        System.out.println(filter);
-        ArrayList<Map<String, String>> result = new ArrayList<>();
-        Map<String, String> map1 = new HashMap<>();
+    @Autowired
+    UserGroupQueryPublisherService userGroupQueryservice;
+    @PostMapping(path="/user-group-query")
+    public String svjUserGroup(@RequestBody UserGroupConditionVO vo) {
+        //{}
+        ArrayList<LabelConditionVO> conditionlist = new ArrayList<>();
+        for(LabelConditionVO labelConditionVO:vo.getConditList()){
 
-
+            conditionlist.add(labelConditionVO);
+        }
+        /*Map<String, String> map = new HashMap<>();
+        map.put("conName","svj");
+        map.put("labelId","svj_user_scheme_count");
+        map.put("condition",">");
+        map.put("value","200");
+        conditionlist.add(map);
+        System.out.println(conditionlist);*/
+       /* LabelConditionVO labelConditionVO = new LabelConditionVO();
+        labelConditionVO.setLabelId("svj_user_scheme_count");
+        labelConditionVO.setCondition(">");
+        labelConditionVO.setValue("200");
+        LabelConditionVO labelConditionVO1 = new LabelConditionVO();
+        labelConditionVO1.setLabelId("svj_user_organname");
+        labelConditionVO1.setCondition("=");
+        labelConditionVO1.setValue("三维家家居运营系统");
+        LabelConditionVO labelConditionVO2 = new LabelConditionVO();
+        labelConditionVO2.setLabelId("svj_user_scheme_mon_count");
+        labelConditionVO2.setCondition(">");
+        labelConditionVO2.setValue("5");
+        conditionlist.add(labelConditionVO);
+        conditionlist.add(labelConditionVO1);
+        conditionlist.add(labelConditionVO2);*/
+        System.out.println(conditionlist.toString());
+        //System.out.println(vo.getConditList());
+        ArrayList<UserGroupQuery> result = new ArrayList<>();
+        List<UserGroupQuery> querylist = userGroupQueryservice.getUserGroupQueryInfo(conditionlist);
+        for(UserGroupQuery userGroupQuery:querylist){
+            result.add(userGroupQuery);
+        }
 
         return JSON.toJSONString(result);
     }
     //http://localhost:8070/label-query
     @Autowired
     LabelQueryPublisherService labelservice;
-    @GetMapping("/label-query")
-    public String svjlabel(@RequestParam(value = "comName", defaultValue = "三维家") String comName,@RequestParam(value = "labelId", defaultValue = "svj_user_scheme_count") String labelId,@RequestParam(value = "condition", defaultValue = ">") String condition,@RequestParam(value = "conValue", defaultValue = "200") String conValue) {
+    @PostMapping(path="/label-query")
+    public String svjlabel(@RequestBody OneLabelConditionVO vo) {
 
-        System.out.println("公司名称:"+conValue);
+        System.out.println("公司名称:"+vo.getComName());
         String filter = null;
-        if(condition.equals("=")){
-            filter = "\"info\".\""+labelId+"\""+condition+conValue;
+        if(vo.getCondition().equals("=")){
+            filter = "\"info\".\""+vo.getLabelId()+"\""+vo.getCondition()+vo.getValue();
         }else {
-             filter = "to_number(\"info\".\""+labelId+"\")"+condition+conValue;
+             filter = "to_number(\"info\".\""+vo.getLabelId()+"\")"+vo.getCondition()+vo.getValue();
         }
         //String filter = "\"info\".\""+labelId+"\""+condition+conValue;
         System.out.println("查询条件:"+filter);
